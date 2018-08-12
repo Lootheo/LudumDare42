@@ -14,7 +14,7 @@ public class TapEvents : MonoBehaviour
             score = value;
             scoreText.text = score.ToString();
         } }
-    public TappableCharacter[] frontCharacters = new TappableCharacter[2];
+    public Character[] frontCharacters = new Character[2];
 
 
     public void Start()
@@ -38,7 +38,7 @@ public class TapEvents : MonoBehaviour
         }
     }
 
-    public void DisplayInfo(TappableCharacter character)
+    public void DisplayInfo(Character character)
     {
         panels[(int)character.side].FillPanel(character);
     }
@@ -80,14 +80,17 @@ public class PanelInfo
     public Text txtAge;
     public Text txtName;
     public Text txtInfected;
+    public Text txtJob;
     public Image imgPortrait;
 
 
 
-    public void FillPanel(TappableCharacter character)
+    public void FillPanel(Character character)
     {
         txtName.text = "Name: " + character.name;
         txtAge.text = "Age: " + character.age.ToString();
+        txtJob.text = character.job.ToString();
+        imgPortrait.sprite = character.portrait;
         if (character.infected)
         {
             txtInfected.text = "Infected";

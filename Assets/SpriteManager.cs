@@ -1,38 +1,68 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum BodyPart { Head, Hair , LeftArm, RightArm, Body, Legs}
 public class SpriteManager : MonoBehaviour {
     public List<Sprite> headSprites, eyeSprites,noseSprites,eyeBrowSprites, mouthSprites, hairSprites,handSprites,legSprites,armSprites,shirtSprites,shoeSprites,beltSprites;
-	
-    public void FillCharacterChildSprites(Transform parent)
+    public List<Sprite> malePortraitSprites,femalePortraitSprites;
+    public List<Sprite> maleShirtSprites, femaleShirtSprites;
+    // cabeza, cabello, brazo izq, brazo derecho, torso, piernas (el par)
+    public List<Sprite> medicSprites;
+    public void FillCharacterChildSprites(Character character)
+    {
+        switch (character.job)
+        {
+            case Job.Medic:
+                FillSpecificSprites(character.transform, medicSprites);
+                break;
+            default:
+                FillRandomSprites(character.transform);
+                break;
+        }
+    }
+
+    private void FillSpecificSprites(Transform parent, List<Sprite> specificClothesList)
+    {
+        SetRandomSprite(parent.Find("Head"),headSprites);
+        SetRandomSprite(parent.Find("Hair"), hairSprites );
+        SetSprite(parent.Find("LeftArm"), specificClothesList[2]);
+        SetSprite(parent.Find("RightArm"), specificClothesList[3]);
+        SetSprite(parent.Find("Shirt"), specificClothesList[4]);
+        SetSprite(parent.Find("Legs"), specificClothesList[5]);
+    }
+
+    public Sprite GetRandomPortrait(Character character)
+    {
+        if (character.gender == Gender.Male)
+        {
+            return malePortraitSprites[Random.Range(0, malePortraitSprites.Count)];
+        }
+        else
+        {
+            return femalePortraitSprites[Random.Range(0, femalePortraitSprites.Count)];
+        }
+
+    }
+
+
+    public void FillRandomSprites(Transform parent)
     {
         //Central, unique sprites
-
-        SetRandomSprite(parent.Find("Head"),headSprites);
-        SetRandomSprite(parent.Find("Head/Hair"), hairSprites);
-        SetRandomSprite(parent.Find("Head/Mouth"),  mouthSprites);
-        SetRandomSprite(parent.Find("Head/Nose"),  noseSprites);
+        SetRandomSprite(parent.Find("Head"), headSprites);
+        SetRandomSprite(parent.Find("Hair"), hairSprites);
         SetRandomSprite(parent.Find("Shirt"), shirtSprites);
         SetRandomSprite(parent.Find("Belt"), beltSprites);
-
         //Side searches
-        Transform right = parent.Find("Right");
-        Transform left = parent.Find("Left");
-        Sprite mirrorSprite =  SetRandomSprite(right.Find("RightLeg"), legSprites);
-        SetSprite(left.Find("LeftLeg"), mirrorSprite);
-        mirrorSprite = SetRandomSprite(right.Find("RightArm"), armSprites);
-        SetSprite(left.Find("LeftArm"), mirrorSprite);
-        mirrorSprite = SetRandomSprite(right.Find("RightHand"), handSprites);
-        SetSprite(left.Find("LeftHand"), mirrorSprite);
-        mirrorSprite = SetRandomSprite(right.Find("RightShoe"), shoeSprites);
-        SetSprite(left.Find("LeftShoe"), mirrorSprite);
-        mirrorSprite = SetRandomSprite(right.Find("RightEye"), eyeSprites);
-        SetSprite(left.Find("LeftEye"), mirrorSprite);
-
-
-
-
+        Sprite mirrorSprite = SetRandomSprite(parent.Find("RightLeg"), legSprites);
+        SetSprite(parent.Find("LeftLeg"), mirrorSprite);
+        mirrorSprite = SetRandomSprite(parent.Find("RightArm"), armSprites);
+        SetSprite(parent.Find("LeftArm"), mirrorSprite);
+        mirrorSprite = SetRandomSprite(parent.Find("RightHand"), handSprites);
+        SetSprite(parent.Find("LeftHand"), mirrorSprite);
+        mirrorSprite = SetRandomSprite(parent.Find("RightShoe"), shoeSprites);
+        SetSprite(parent.Find("LeftShoe"), mirrorSprite);
+        mirrorSprite = SetRandomSprite(parent.Find("RightEye"), eyeSprites);
+        SetSprite(parent.Find("LeftEye"), mirrorSprite);
     }
 
 

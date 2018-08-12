@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Side { Left, Right ,Center}
-
+public enum Job { None, Medic, Engineer, Soldier,Scientist,FireFighter}
+public enum Gender { Male, Female }
 [RequireComponent(typeof(PolygonCollider2D))]
-public class TappableCharacter : MonoBehaviour {
+public class Character : MonoBehaviour {
     public int age = 10;
     public bool infected = false;
     public Side side = Side.Right;
+    public Job job = Job.None;
+    public Gender gender = Gender.Male;
     public SpriteRenderer spriteRenderer;
-
-    private List<string> characterNames = new List<string>
-    {
-        "Melissa","Bob","Arthur","Paco","Regina","Thomas"
-    };
+    public Sprite portrait;
     
 
     public void SetRandomValues()
@@ -22,8 +21,12 @@ public class TappableCharacter : MonoBehaviour {
         age = Random.Range(10, 90);
         //side = (Side)Random.Range(0, 2);
         infected = Random.Range(0, 5) > 3;
-        name = characterNames[Random.Range(0, characterNames.Count)];
+        job = (Job)Random.Range(0, 6);
+        gender = (Gender)Random.Range(0, 2);
+        name = TextsLibrary.GetRandomCharacterName(this);
+        portrait = FindObjectOfType<SpriteManager>().GetRandomPortrait(this);
         AssignSprites();
+        AssignSpriteProperties();
     }
 
 
@@ -37,7 +40,7 @@ public class TappableCharacter : MonoBehaviour {
 
     public void AssignSprites()
     {
-        FindObjectOfType<SpriteManager>().FillCharacterChildSprites(gameObject.transform);
+        FindObjectOfType<SpriteManager>().FillCharacterChildSprites(this);
     }
     public void AssignSpriteProperties()
     {
@@ -48,16 +51,22 @@ public class TappableCharacter : MonoBehaviour {
         }
         if (infected)
         {
-            spriteRenderer.color = Color.green;
+            foreach(SpriteRenderer childRenderer in GetComponentsInChildren<SpriteRenderer>())
+            {
+                childRenderer.color = Color.green;
+            }
         }
         else
         {
-            spriteRenderer.color = Color.white;
+            foreach (SpriteRenderer childRenderer in GetComponentsInChildren<SpriteRenderer>())
+            {
+                childRenderer.color = Color.white;
+            }
         }
     }
 
 
-    public void CopyValues(TappableCharacter characterToCopy)
+    public void CopyValues(Character characterToCopy)
     {
         age = characterToCopy.age;
         infected = characterToCopy.infected;
@@ -77,7 +86,7 @@ public class TappableCharacter : MonoBehaviour {
         else
         {
             FindObjectOfType<TapEvents>().Score-=10;
-            Debug.Log(name + " was not infected, you did wrong");
+            Debug.Log(name + " was infected, you did wrong");
         }
     }
     public void Block()
@@ -95,7 +104,7 @@ public class TappableCharacter : MonoBehaviour {
         else
         {
             FindObjectOfType<TapEvents>().Score--;
-            Debug.Log(name + " was infected, you did wrong");
+            Debug.Log(name + " was not infected, you did wrong");
         }
     }
 
