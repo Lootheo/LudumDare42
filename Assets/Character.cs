@@ -5,6 +5,7 @@ using UnityEngine;
 public enum Side { Left, Right ,Center}
 public enum Job { None, Medic, Engineer, Soldier,Scientist,FireFighter}
 public enum Gender { Male, Female }
+public enum Disease { None, Parkinson, Alzheimer}
 [RequireComponent(typeof(PolygonCollider2D))]
 public class Character : MonoBehaviour {
     public int age = 10;
@@ -14,7 +15,8 @@ public class Character : MonoBehaviour {
     public Gender gender = Gender.Male;
     public SpriteRenderer spriteRenderer;
     public Sprite portrait;
-    
+    public List<Disease> diseases = new List<Disease>();
+    Vector3 startPosition;
 
     public void SetRandomValues()
     {
@@ -24,6 +26,15 @@ public class Character : MonoBehaviour {
         job = (Job)Random.Range(0, 6);
         gender = (Gender)Random.Range(0, 2);
         name = TextsLibrary.GetRandomCharacterName(this);
+        diseases = new List<Disease>();
+        if (!infected)
+        {
+            if (Random.Range(0, 10)>7)
+            {
+                startPosition = transform.position;
+                diseases.Add(Disease.Parkinson);
+            }
+        }
         portrait = FindObjectOfType<SpriteManager>().GetRandomPortrait(this);
         AssignSprites();
         AssignSpriteProperties();
@@ -34,6 +45,14 @@ public class Character : MonoBehaviour {
     public void Awake()
     {
         SetRandomValues();
+    }
+
+    public void Update()
+    {
+        if (diseases.Contains(Disease.Parkinson))
+        {
+            transform.position = startPosition + Random.insideUnitSphere;
+        }
     }
 
     #region sprites

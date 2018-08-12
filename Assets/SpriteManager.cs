@@ -28,8 +28,9 @@ public class SpriteManager : MonoBehaviour
 
     private void FillSpecificSprites(Transform parent, List<Sprite> specificClothesList)
     {
-        SetRandomSprite(parent.Find("Head"), headSprites);
-        SetRandomSprite(parent.Find("Hair"), hairSprites);
+        FillRandomSprites(parent);
+        //SetRandomSprite(parent.Find("Head"), headSprites);
+        //SetRandomSprite(parent.Find("Hair"), hairSprites);
         SetSprite(parent.Find("LeftArm"), specificClothesList[2]);
         SetSprite(parent.Find("RightArm"), specificClothesList[3]);
         SetSprite(parent.Find("Shirt"), specificClothesList[4]);
