@@ -6,6 +6,7 @@ public enum Side { Left, Right ,Center}
 public enum Job { None, Medic, Engineer, Soldier,Scientist,FireFighter}
 public enum Gender { Male, Female }
 public enum Disease { None, Parkinson, Alzheimer}
+public enum BodyType { Kid,Adult,Old}
 [RequireComponent(typeof(PolygonCollider2D))]
 public class Character : MonoBehaviour {
     public int age = 10;
@@ -13,23 +14,40 @@ public class Character : MonoBehaviour {
     public Side side = Side.Right;
     public Job job = Job.None;
     public Gender gender = Gender.Male;
+    public BodyType bodyType = BodyType.Adult;
     public SpriteRenderer spriteRenderer;
     public Sprite portrait;
     public List<Disease> diseases = new List<Disease>();
-    Vector3 startPosition;
+    public Vector3 startPosition;
 
     public void SetRandomValues()
     {
-        age = Random.Range(10, 90);
-        //side = (Side)Random.Range(0, 2);
+        age = Random.Range(0, 90);
+        if(age <= 10)
+        {
+            bodyType = BodyType.Kid;
+        }else if(age > 70)
+        {
+            bodyType = BodyType.Old;
+        }else
+        {
+            bodyType = BodyType.Adult;
+        }
         infected = Random.Range(0, 5) > 3;
-        job = (Job)Random.Range(0, 6);
+        if (bodyType == BodyType.Adult)
+        {
+            job = (Job)Random.Range(0, 6);
+        }
+        else
+        {
+            job = Job.None;
+        }
         gender = (Gender)Random.Range(0, 2);
         name = TextsLibrary.GetRandomCharacterName(this);
         diseases = new List<Disease>();
         if (!infected)
         {
-            if (Random.Range(0, 10)>7)
+            if (Random.Range(0, 10)>7 && bodyType == BodyType.Old)
             {
                 startPosition = transform.position;
                 diseases.Add(Disease.Parkinson);
@@ -51,8 +69,14 @@ public class Character : MonoBehaviour {
     {
         if (diseases.Contains(Disease.Parkinson))
         {
-            transform.position = startPosition + Random.insideUnitSphere;
+            StartCoroutine(ShakeCoroutine());
         }
+    }
+
+    public IEnumerator ShakeCoroutine()
+    {
+        yield return new WaitForSeconds(0.3f);
+        transform.position = startPosition + Random.insideUnitSphere / 20;
     }
 
     #region sprites

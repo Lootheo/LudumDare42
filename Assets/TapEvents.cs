@@ -81,6 +81,7 @@ public class PanelInfo
     public Text txtName;
     public Text txtInfected;
     public Text txtJob;
+    public Text txtNotes;
     public Image imgPortrait;
 
 
@@ -90,6 +91,18 @@ public class PanelInfo
         txtName.text = "Name: " + character.name;
         txtAge.text = "Age: " + character.age.ToString();
         txtJob.text = character.job.ToString();
+        txtNotes.text = "Notes: ";
+        if (character.diseases.Count > 0)
+        {
+            foreach(Disease disease in character.diseases)
+            {
+                txtNotes.text += "\n " + disease.ToString();
+            }
+        }
+        else
+        {
+            txtNotes.text += "\nN/A";
+        }
         imgPortrait.sprite = character.portrait;
         if (character.infected)
         {

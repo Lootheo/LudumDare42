@@ -42,6 +42,7 @@ public class CrowdLines : MonoBehaviour {
     public void SwapPlaces(Character originGO, Character destinyGO)
     {
         originGO.transform.position = destinyGO.transform.position;
+        originGO.GetComponent<Character>().startPosition= originGO.transform.position;
     }
 
 
