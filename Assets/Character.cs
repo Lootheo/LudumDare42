@@ -33,7 +33,6 @@ public class Character : MonoBehaviour {
         {
             bodyType = BodyType.Adult;
         }
-        infected = Random.Range(0, 5) > 3;
         if (bodyType == BodyType.Adult)
         {
             job = (Job)Random.Range(0, 6);
@@ -42,6 +41,7 @@ public class Character : MonoBehaviour {
         {
             job = Job.None;
         }
+        infected = Random.Range(0, 10) > 7;
         gender = (Gender)Random.Range(0, 2);
         name = TextsLibrary.GetRandomCharacterName(this);
         diseases = new List<Disease>();
@@ -58,12 +58,11 @@ public class Character : MonoBehaviour {
         AssignSpriteProperties();
     }
 
-
-
     public void Awake()
     {
         SetRandomValues();
     }
+
 
     public void Update()
     {
