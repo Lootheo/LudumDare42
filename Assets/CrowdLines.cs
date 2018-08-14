@@ -11,7 +11,15 @@ public class CrowdLines : MonoBehaviour {
     public void Start()
     {
         TapEvents = FindObjectOfType<TapEvents>();
+        rightLine[0].side = Side.Right;
+        rightLine[1].side = Side.Right;
+        rightLine[2].side = Side.Right;
+
+        leftLine[0].side = Side.Left;
+        leftLine[1].side = Side.Left;
+        leftLine[2].side = Side.Left;
         AssignLineCharacters();
+
     }
 
     public void ProceedLine(int side)

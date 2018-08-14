@@ -64,6 +64,7 @@
     <Compile Include="Assets\SpriteManager.cs" />
     <Compile Include="Assets\TapEvents.cs" />
     <Compile Include="Assets\TextsLibrary.cs" />
+    <Compile Include="Assets\TypewriterEffect.cs" />
     <Reference Include="UnityEditor.StandardEvents">
       <HintPath>C:/Users/jmao7/Documents/LudumDare42_1/Library/ScriptAssemblies/UnityEditor.StandardEvents.dll</HintPath>
     </Reference>

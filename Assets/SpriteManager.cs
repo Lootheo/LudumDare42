@@ -38,6 +38,10 @@ public class SpriteManager : MonoBehaviour
     public List<Sprite> childMaleLegSprites, childFemaleLegSprites;
     public List<Sprite> childMaleShirtSprites, childFemaleShirtSprites;
 
+    [Header("Extras")]
+    public List<Sprite> extraSprites;
+    
+
 
     [Header("Specific Outfits")]
     // cabeza, cabello, brazo izq, brazo derecho, torso, piernas (el par)
@@ -155,6 +159,14 @@ public class SpriteManager : MonoBehaviour
                 SetRandomSprite(parent.Find("RightArm"), femaleRightArmSprites);
                 SetRandomSprite(parent.Find("LeftArm"), femaleLeftArmSprites);
             }
+        }
+
+        //Extras
+        if (parent.gameObject.GetComponent<Character>().infected)
+        {
+            SetRandomSprite(parent.Find("Extra1"), extraSprites);
+            SetRandomSprite(parent.Find("Extra2"), extraSprites);
+            SetRandomSprite(parent.Find("Extra3"), extraSprites);
         }
     }
 

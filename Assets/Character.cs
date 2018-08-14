@@ -20,6 +20,8 @@ public class Character : MonoBehaviour {
     public List<Disease> diseases = new List<Disease>();
     public Vector3 startPosition;
 
+    public bool guest = false;
+
     public void SetRandomValues()
     {
         age = Random.Range(0, 90);
@@ -41,17 +43,25 @@ public class Character : MonoBehaviour {
         {
             job = Job.None;
         }
-        infected = Random.Range(0, 10) > 7;
+        diseases = new List<Disease>();
+        if (!guest)
+        {
+            infected = Random.Range(0, 10) > 7;
+            if (!infected)
+            {
+                if (Random.Range(0, 10) > 4 && bodyType == BodyType.Old)
+                {
+                    startPosition = transform.position;
+                    diseases.Add(Disease.Parkinson);
+                }
+            }
+        }
         gender = (Gender)Random.Range(0, 2);
         name = TextsLibrary.GetRandomCharacterName(this);
-        diseases = new List<Disease>();
-        if (!infected)
+       
+        if (diseases.Contains(Disease.Parkinson))
         {
-            if (Random.Range(0, 10)>7 && bodyType == BodyType.Old)
-            {
-                startPosition = transform.position;
-                diseases.Add(Disease.Parkinson);
-            }
+            StartCoroutine(ShakeCoroutine());
         }
         portrait = FindObjectOfType<SpriteManager>().GetRandomPortrait(this);
         AssignSprites();
@@ -66,16 +76,15 @@ public class Character : MonoBehaviour {
 
     public void Update()
     {
-        if (diseases.Contains(Disease.Parkinson))
-        {
-            StartCoroutine(ShakeCoroutine());
-        }
     }
 
     public IEnumerator ShakeCoroutine()
     {
-        yield return new WaitForSeconds(0.3f);
-        transform.position = startPosition + Random.insideUnitSphere / 20;
+        while (gameObject != null)
+        {
+            yield return new WaitForSeconds(0.1f);
+            transform.position = startPosition + Random.insideUnitSphere / 20;
+        }
     }
 
     #region sprites
@@ -95,14 +104,14 @@ public class Character : MonoBehaviour {
         {
             foreach(SpriteRenderer childRenderer in GetComponentsInChildren<SpriteRenderer>())
             {
-                childRenderer.color = Color.green;
+                //childRenderer.color = Color.green;
             }
         }
         else
         {
             foreach (SpriteRenderer childRenderer in GetComponentsInChildren<SpriteRenderer>())
             {
-                childRenderer.color = Color.white;
+               // childRenderer.color = Color.white;
             }
         }
     }
@@ -119,15 +128,17 @@ public class Character : MonoBehaviour {
     #region events
     public void Pass()
     {
-        //Debug.Log(name + " passed");
+        FindObjectOfType<TapEvents>().Population++;
         if (!infected)
         {
             FindObjectOfType<TapEvents>().Score++;
+
             Debug.Log(name + " was not infected, you did right");
         }
         else
         {
             FindObjectOfType<TapEvents>().Score-=10;
+
             Debug.Log(name + " was infected, you did wrong");
         }
     }

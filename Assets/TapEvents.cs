@@ -9,17 +9,29 @@ public class TapEvents : MonoBehaviour
     public Text responseText;
     public Text scoreText;
     int score = 0;
+    int maxPopulation = 50;
     public int Score { get { return score; }
             set {
             score = value;
             scoreText.text = score.ToString();
         } }
+
+    public Text populationText;
+    int population = 0;
+    public int Population {
+        get { return population; }
+        set {
+            population = value;
+            populationText.text =population.ToString()+"/"+maxPopulation.ToString();
+        }
+    }
     public Character[] frontCharacters = new Character[2];
 
 
     public void Start()
     {
         Score = 0;
+        Population = 0;
     }
     private void Update()
     {
